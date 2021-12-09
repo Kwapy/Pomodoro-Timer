@@ -1,6 +1,6 @@
 <nav>
     <div class="logo">
-        <h1 class="logo text-2xl m-10">Pomodoro Timer</h1>
+        <h1 class="logo text-2xl font-bold m-10">Pomodoro Timer</h1>
     </div>
     <div class="playlist-text m-10">
         <a href="/">Try this playlist</a>
