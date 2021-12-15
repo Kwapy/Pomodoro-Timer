@@ -1,19 +1,25 @@
 <script>
     import Start from "../components/Start.svelte";
 
-    const startingMinutes = 1;
+    const startingMinutes = 20;
     let time = startingMinutes * 60 * 100;
-    let minutes;
-    let seconds;
+    let minutes= Math.floor((time/100)/60);
+    let seconds= "0" + Math.floor((time/100) % 60);
     let count=0;
     let start = false;
-    let dashoffset=150;
+    let dashoffset=1500;
 
-    setInterval(updateTimer, 10)
+    
 
     function runTimer(){
+        setInterval(() => {
+            updateTimer();
+        }, 10)
     }
+    
+    
     function updateTimer(){
+        
         minutes = Math.floor((time/100)/60);
         seconds= Math.floor((time/100) % 60);
         console.log(minutes, seconds);
@@ -73,6 +79,7 @@
         stroke: #6266F1;
         stroke-linecap: round;
         stroke-dasharray: 1500;
+        background: linear-gradient(45deg, #6266F1 0%, #7D53DE 100%);
     }
     #outer{
         width: 450px;
@@ -98,7 +105,7 @@
     }
     #start-button{
         margin-top: 5vh;
-        background-color: #6266F1;
+        background-image: linear-gradient(45deg, #6266F1 0%, #7D53DE 100%);
         border-radius: 20px;
     }
 </style>
