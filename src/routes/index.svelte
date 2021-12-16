@@ -1,39 +1,62 @@
 <script>
+import { run } from "svelte/internal";
+
     import Start from "../components/Start.svelte";
 
-    const startingMinutes = 20;
+    const startingMinutes = 1;
     let time = startingMinutes * 60 * 100;
     let minutes= Math.floor((time/100)/60);
+    if(minutes<10){
+            minutes = "0" + minutes;
+        }
+        else{}
     let seconds= "0" + Math.floor((time/100) % 60);
-    let count=0;
-    let start = false;
+    let timerRunning=false;
     let dashoffset=1500;
-
+    var timer;
     
 
     function runTimer(){
-        setInterval(() => {
+        timer = setInterval(() => {
             updateTimer();
         }, 10)
     }
+
     
-    
+    function stop(){
+        console.log("stop");
+        timerRunning=false;
+        clearInterval(timer);
+    }
+
     function updateTimer(){
-        
+        console.log("stop")
+        timerRunning=true;
         minutes = Math.floor((time/100)/60);
         seconds= Math.floor((time/100) % 60);
         console.log(minutes, seconds);
+
         if(seconds<10){
             seconds = "0" + seconds;
         }
+        else{}
+
         if(minutes<10){
             minutes = "0" + minutes;
         }
+        else{}
 
+        if(time==0){
+            stop();
+            startingMinutes=1;
+            alert("The time has finished");
+        }
         dashoffset = ((time/100)*1350)/(startingMinutes*60);
 
         time--;
     }
+    
+    
     
 </script>
 
@@ -53,16 +76,24 @@
                 cx="50%" cy="50%" r="215" fill="transparent" stroke-dashoffset={1500-dashoffset} 
                 animation= "dash 5s linear alternate"/>
             </svg>
-            <div id="timer-text">
-                <p id="time" class="relative text-7xl  font-extrabold text-center">{minutes}:{seconds}</p>
+            <div id="timer-text" class="content-center text-center">
+                <p id="time" class="text-7xl font-extrabold">{minutes}:{seconds}</p>
             </div>
             
         </div>
+        {#if timerRunning == false}
         <div id="start-button" class="justify-around my-72">
             <button on:click={runTimer} class="text-4xl py-4 px-10 text-white font-bold shadow-indigo-500/50">
                 Start
             </button>
         </div>
+        {:else}
+        <div id="start-button" class="justify-around my-72">
+            <button  on:click={stop} class="text-4xl py-4 px-10 text-white font-bold shadow-indigo-500/50">
+                Stop
+            </button>
+        </div>
+        {/if}
 </main>
 
 <style>
@@ -89,6 +120,8 @@
         border: inset 10px solid;
         box-shadow: 0px 0px 6px 0px #E2E2E2;
         box-shadow: inset 0px 0px 6px 0px #E2E2E2;
+        text-align: center;
+        justify-content: center;
     }
     circle{
         width:150px;height:150px;
@@ -100,12 +133,24 @@
         -o-box-shadow: 10px -10px rgba(0,0,0,0.6);
         border-radius:100px;
     }
+    #timer-text{
+        display: flex;
+        justify-content: center;
+    }
     #time{
+        width: 1000px;
+        place-items: center;
+        justify-content: space-evenly;
+        display: flex;
         transform: translateY(-16.5rem);
+        border: solid 2px black;
+        text-align: center;
+        
     }
     #start-button{
         margin-top: 5vh;
         background-image: linear-gradient(45deg, #6266F1 0%, #7D53DE 100%);
         border-radius: 20px;
     }
+    
 </style>
