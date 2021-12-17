@@ -3,7 +3,8 @@ import { run } from "svelte/internal";
 
     import Start from "../components/Start.svelte";
 
-    const startingMinutes = 1;
+    let startingMinutes = 1;
+    let aux = startingMinutes;
     let time = startingMinutes * 60 * 100;
     let minutes= Math.floor((time/100)/60);
     if(minutes<10){
@@ -22,7 +23,7 @@ import { run } from "svelte/internal";
         }, 10)
     }
 
-    
+
     function stop(){
         console.log("stop");
         timerRunning=false;
@@ -30,11 +31,21 @@ import { run } from "svelte/internal";
     }
 
     function updateTimer(){
-        console.log("stop")
         timerRunning=true;
         minutes = Math.floor((time/100)/60);
         seconds= Math.floor((time/100) % 60);
         console.log(minutes, seconds);
+
+        if(time==0){
+            stop();
+            startingMinutes=aux;
+            time = startingMinutes * 60 * 100;
+            minutes = Math.floor((time/100)/60);
+            seconds= Math.floor((time/100) % 60);
+            alert("The time has finished");
+        }
+        else{
+        }
 
         if(seconds<10){
             seconds = "0" + seconds;
@@ -45,16 +56,12 @@ import { run } from "svelte/internal";
             minutes = "0" + minutes;
         }
         else{}
-
-        if(time==0){
-            stop();
-            startingMinutes=1;
-            alert("The time has finished");
-        }
         dashoffset = ((time/100)*1350)/(startingMinutes*60);
 
         time--;
     }
+
+        
     
     
     
@@ -77,9 +84,12 @@ import { run } from "svelte/internal";
                 animation= "dash 5s linear alternate"/>
             </svg>
             <div id="timer-text" class="content-center text-center">
-                <p id="time" class="text-7xl font-extrabold">{minutes}:{seconds}</p>
-            </div>
-            
+                <div id="time" class="grid grid-cols-7 text-center content-center text-7xl font-extrabold">
+                    <p class="col-span-3">{minutes}</p>
+                    <p id="double-dot" class="">:</p>
+                    <p class="col-span-3">{seconds}</p>
+                </div>
+            </div> 
         </div>
         {#if timerRunning == false}
         <div id="start-button" class="justify-around my-72">
@@ -136,14 +146,14 @@ import { run } from "svelte/internal";
     #timer-text{
         display: flex;
         justify-content: center;
+        align-items: center;
     }
     #time{
-        width: 1000px;
-        place-items: center;
+        width: auto;
+        flex: row;
         justify-content: space-evenly;
-        display: flex;
         transform: translateY(-16.5rem);
-        border: solid 2px black;
+        /*border: solid 2px black;*/
         text-align: center;
         
     }
