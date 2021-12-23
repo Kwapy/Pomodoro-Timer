@@ -1,11 +1,12 @@
+
 <script context="module">
-    export let showSettings = false;
+    $: export let showSettings = false;
 </script>
 
 <script>
     function toggleSettings(){
-        showSettings = true;
-        console.log('Setting == true');
+        showSettings = true
+        console.log({showSettings})
     }
 </script>
 

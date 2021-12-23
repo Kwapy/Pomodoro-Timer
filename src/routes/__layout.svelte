@@ -1,3 +1,4 @@
+
 <script>
 import Nav from "../components/Nav.svelte";
 import Index from "./index.svelte";

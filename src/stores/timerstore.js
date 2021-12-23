@@ -1,3 +1,3 @@
 import { writable } from "svelte/store";
 
-export const time = writable([]);
+export let time = writable(false);
