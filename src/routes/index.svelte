@@ -3,7 +3,12 @@
     import Start from "../components/Start.svelte";
     import Nav from "../components/Nav.svelte"
     import Timer from "../components/Timer.svelte";
-    import { showSettings } from "../components/Nav.svelte";
+    import { showSettings } from "../stores/store";
+    let showSettings_value;
+    showSettings.subscribe(value => {
+		showSettings_value = value;
+	});
+
        
 </script>
 
@@ -11,9 +16,12 @@
 <svelte:head>
     <title>Pomodoro Timer</title>
 </svelte:head>
-{#if showSettings == false}
+
+<Nav/>
+
+{#if showSettings_value == false}
 <Timer></Timer>
-<h1>{showSettings}</h1>
+<h1>{showSettings_value}</h1>
 {:else}
 <h1>Hola</h1>
 {/if}

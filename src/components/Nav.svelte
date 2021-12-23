@@ -1,11 +1,9 @@
 
-<script context="module">
-    $: export let showSettings = false;
-</script>
 
 <script>
+    import { showSettings } from "../stores/store";
     function toggleSettings(){
-        showSettings = true
+        showSettings.set(true)
         console.log({showSettings})
     }
 </script>
