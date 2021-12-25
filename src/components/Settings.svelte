@@ -1,7 +1,7 @@
 <script>
     import { showSettings } from "../stores/store";
     import { fade } from "svelte/transition";
-    
+
     function toggleSettings(){
         showSettings.set(false)
         console.log({showSettings})
@@ -11,7 +11,7 @@
 <div transition:fade={{duration: 200}} class="modal-bg">
     <div class="modal grid grid-cols-2 px-12 py-12">
         <span on:click={toggleSettings} class="modal-close font-extrabold">X</span>
-        <div class="work-time-setting px-5">
+        <div class="work-time-setting px-4">
             <h1 class="font-extrabold">Work Time</h1>
             <div class="minutes-settings-container py-1">
                 <input type="text" name="work-minutes" placeholder="Minutes">
@@ -20,7 +20,7 @@
                 <input type="text" name="work-seconds" placeholder="Seconds"> 
             </div>
         </div>
-        <div class="break-time-settings px-5">
+        <div class="break-time-settings px-4">
             <h1 class="font-extrabold">Break Time</h1>
             <div class="minutes-settings-container py-1">
                 <input type="text" name="break-minutes" placeholder="Minutes">
