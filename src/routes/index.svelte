@@ -3,7 +3,9 @@
     import Start from "../components/Start.svelte";
     import Nav from "../components/Nav.svelte"
     import Timer from "../components/Timer.svelte";
+    import Settings from "../components/Settings.svelte";
     import { showSettings } from "../stores/store";
+
     let showSettings_value;
     showSettings.subscribe(value => {
 		showSettings_value = value;
@@ -18,12 +20,10 @@
 </svelte:head>
 
 <Nav/>
-
-{#if showSettings_value == false}
 <Timer></Timer>
 <h1>{showSettings_value}</h1>
-{:else}
-<h1>Hola</h1>
+{#if showSettings_value == true}
+<Settings></Settings>
 {/if}
 
 <style>
