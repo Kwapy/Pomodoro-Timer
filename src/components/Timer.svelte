@@ -1,15 +1,34 @@
 <script>
-    let startingMinutes = 1;
-    let aux = startingMinutes;
-    let time = startingMinutes * 60 * 100;
-    let minutes= Math.floor((time/100)/60);
-    if(minutes<10){
+    import { startingMinutes } from "../stores/store";
+    let startingMinutes_value;
+    startingMinutes.subscribe(value => {
+		startingMinutes_value = value;
+	});
+
+    let aux;
+    $: aux = startingMinutes_value;
+    let time;
+    $: time = startingMinutes_value * 60 * 100;
+    let minutes;
+    $: minutes= Math.floor((time/100)/60);
+    $: if(minutes<10){
             minutes = "0" + minutes;
         }
-        else{}
-    let seconds= "0" + Math.floor((time/100) % 60);
+    else{}
+
+    let seconds;
+    $: seconds= Math.floor((time/100) % 60);
+    $: if(seconds<10){
+            seconds = "0" + seconds;
+        }
+    else{}
     let timerRunning=false;
-    let dashoffset=1500;
+    
+    let dashoffset;
+    $: if(time === (startingMinutes_value * 60 * 100)){
+        dashoffset=1500;
+    }
+    
     var timer;
 
     function runTimer(){
@@ -17,7 +36,6 @@
             updateTimer();
         }, 10)
     }
-
 
     function stop(){
         console.log("stop");
@@ -33,7 +51,7 @@
 
         if(time==0){
             stop();
-            startingMinutes=aux;
+            startingMinutes_value=aux;
             time = startingMinutes * 60 * 100;
             minutes = Math.floor((time/100)/60);
             seconds= Math.floor((time/100) % 60);
@@ -51,7 +69,8 @@
             minutes = "0" + minutes;
         }
         else{}
-        dashoffset = ((time/100)*1350)/(startingMinutes*60);
+        
+        dashoffset = ((time/100)*1350)/(startingMinutes_value*60);
 
         time--;
     }
@@ -70,10 +89,10 @@
                 animation= "dash 5s linear alternate"/>
             </svg>
             <div id="timer-text" class="content-center text-center">
-                <div id="time" class="grid grid-cols-7 text-center content-center text-7xl font-extrabold">
-                    <p class="col-span-3">{minutes}</p>
-                    <p id="double-dot" class="">:</p>
-                    <p class="col-span-3">{seconds}</p>
+                <div id="time" class="grid grid-cols-9 text-7xl font-extrabold">
+                    <p class="block col-span-4 justify-self-end">{minutes}</p>
+                    <p id="dot" class="block">:</p>
+                    <p class="block col-span-4 justify-self-start">{seconds}</p>
                 </div>
             </div> 
         </div>
@@ -135,9 +154,7 @@
         align-items: center;
     }
     #time{
-        width: auto;
-        flex: row;
-        justify-content: space-evenly;
+        width: 14rem;
         transform: translateY(-16.5rem);
         /*border: solid 2px black;*/
         text-align: center;

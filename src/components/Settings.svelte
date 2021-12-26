@@ -1,6 +1,13 @@
 <script>
     import { showSettings } from "../stores/store";
+    import { startingMinutes } from "../stores/store";
     import { fade } from "svelte/transition";
+
+    let startingMinutes_value;
+    function setStartingMinutes(){
+        startingMinutes.set(startingMinutes_value)
+        console.log($startingMinutes)
+    }
 
     function toggleSettings(){
         showSettings.set(false)
@@ -14,20 +21,19 @@
         <div class="work-time-setting px-4">
             <h1 class="font-extrabold">Work Time</h1>
             <div class="minutes-settings-container py-1">
-                <input type="text" name="work-minutes" placeholder="Minutes">
-            </div>
-            <div class="seconds-settings-container py-1">
-                <input type="text" name="work-seconds" placeholder="Seconds"> 
+                <input bind:value={ startingMinutes_value } type="number" placeholder="Minutes">
             </div>
         </div>
         <div class="break-time-settings px-4">
             <h1 class="font-extrabold">Break Time</h1>
             <div class="minutes-settings-container py-1">
-                <input type="text" name="break-minutes" placeholder="Minutes">
+                <input type="number" name="break-minutes" placeholder="Minutes">
             </div>
-            <div class="seconds-settings-container py-1">
-                <input type="text" name="break-seconds" placeholder="Seconds"> 
-            </div>
+        </div>
+        <div id="done-button" class="justify-around col-span-2">
+            <button on:click={setStartingMinutes} on:click={toggleSettings} class="text-2xl py-4 content-center text-white font-bold shadow-indigo-500/50">
+                Done
+            </button>
         </div>
         
         
@@ -68,7 +74,17 @@
         cursor: pointer;
     }
     .modal input{
-        border: 2px solid rgb(187, 187, 187);
-        border-radius: 4px;
+        border-bottom: 2px solid rgb(187, 187, 187);
     }
+    #done-button{
+        position: relative;
+        width: 25%;
+        height: 50%;
+        display: flex;
+        align-items: center;
+        justify-self: center;
+        margin-top: 3vh;
+        background-image: linear-gradient(45deg, #6266F1 0%, #7D53DE 100%);
+        border-radius: 20px;
+    }  
 </style>
