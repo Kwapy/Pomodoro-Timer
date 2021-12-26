@@ -10,7 +10,6 @@
     showSettings.subscribe(value => {
 		showSettings_value = value;
 	});
-
        
 </script>
 
@@ -18,12 +17,11 @@
 <svelte:head>
     <title>Pomodoro Timer</title>
 </svelte:head>
-
-<Nav/>
-<Timer></Timer>
-<h1>{showSettings_value}</h1>
+    <Nav/>
+    <Timer></Timer>
+    <h1>{showSettings_value}</h1>
 {#if showSettings_value == true}
-<Settings></Settings>
+    <Settings></Settings>
 {/if}
 
 <style>
