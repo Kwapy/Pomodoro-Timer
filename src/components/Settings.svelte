@@ -1,12 +1,15 @@
 <script>
     import { showSettings } from "../stores/store";
-    import { startingMinutes } from "../stores/store";
+    import { workMinutes, breakMinutes } from "../stores/store";
     import { fade } from "svelte/transition";
 
     let startingMinutes_value;
+    let breakMinutes_value;
+    startingMinutes_value = ($workMinutes);
+    breakMinutes_value = ($breakMinutes);
     function setStartingMinutes(){
         startingMinutes.set(startingMinutes_value)
-        console.log($startingMinutes)
+        console.log($workMinutes)
     }
 
     function toggleSettings(){
@@ -16,21 +19,23 @@
 </script>
 
 <div transition:fade={{duration: 200}} class="modal-bg">
-    <div class="modal grid grid-cols-2 px-12 py-12">
+    <div class="modal grid grid-row-3 px-12 py-12">
         <span on:click={toggleSettings} class="modal-close font-extrabold">X</span>
         <div class="work-time-setting px-4">
             <h1 class="font-extrabold">Work Time</h1>
             <div class="minutes-settings-container py-1">
-                <input bind:value={ startingMinutes_value } type="number" placeholder="Minutes">
+                <input bind:value={ startingMinutes_value } class="w-20" type="number" placeholder="Minutes" min=0 max=90>
+                <input bind:value={ startingMinutes_value } class="w-40" type="range" max=90>
             </div>
         </div>
         <div class="break-time-settings px-4">
             <h1 class="font-extrabold">Break Time</h1>
             <div class="minutes-settings-container py-1">
-                <input type="number" name="break-minutes" placeholder="Minutes">
+                <input bind:value={ breakMinutes_value } class="w-20" type="number" name="break-minutes" placeholder="Minutes" min=0 max=90>
+                <input bind:value={ breakMinutes_value } class="w-40" type="range" max=90>
             </div>
         </div>
-        <div id="done-button" class="justify-around col-span-2">
+        <div id="done-button" class="justify-around">
             <button on:click={setStartingMinutes} on:click={toggleSettings} class="text-2xl py-4 content-center text-white font-bold shadow-indigo-500/50">
                 Done
             </button>
@@ -78,7 +83,7 @@
     }
     #done-button{
         position: relative;
-        width: 25%;
+        width: 50%;
         height: 50%;
         display: flex;
         align-items: center;

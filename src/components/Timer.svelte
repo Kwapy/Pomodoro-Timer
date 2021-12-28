@@ -1,35 +1,43 @@
 <script>
-    import { startingMinutes } from "../stores/store";
+    import { workMinutes, breakMinutes} from "../stores/store";
+
+    let work_time = true;
+
     let startingMinutes_value;
-    startingMinutes.subscribe(value => {
-		startingMinutes_value = value;
-	});
+
+    $: if(work_time == true){
+        startingMinutes_value = ($workMinutes);
+    }
+        else{
+            startingMinutes_value = ($breakMinutes);
+        }
+    
 
     let aux;
-    $: aux = startingMinutes_value;
     let time;
-    $: time = startingMinutes_value * 60 * 100;
     let minutes;
+    let seconds;
+    $: aux = startingMinutes_value;
+    $: time = startingMinutes_value * 60 * 100;
     $: minutes= Math.floor((time/100)/60);
     $: if(minutes<10){
             minutes = "0" + minutes;
         }
-    else{}
-
-    let seconds;
+        else{}
     $: seconds= Math.floor((time/100) % 60);
     $: if(seconds<10){
             seconds = "0" + seconds;
         }
-    else{}
+        else{}
+    
     let timerRunning=false;
     
     let dashoffset;
     $: if(time === (startingMinutes_value * 60 * 100)){
         dashoffset=1500;
-    }
+        }
     
-    var timer;
+    let timer;
 
     function runTimer(){
         timer = setInterval(() => {
@@ -45,16 +53,12 @@
 
     function updateTimer(){
         timerRunning=true;
-        minutes = Math.floor((time/100)/60);
-        seconds= Math.floor((time/100) % 60);
         console.log(minutes, seconds);
 
         if(time==0){
             stop();
             startingMinutes_value=aux;
-            time = startingMinutes * 60 * 100;
-            minutes = Math.floor((time/100)/60);
-            seconds= Math.floor((time/100) % 60);
+            time = startingMinutes_value * 60 * 100;
             alert("The time has finished");
         }
         else{
@@ -74,13 +78,20 @@
 
         time--;
     }
+
 </script>
 
 
 <main class="items-center justify-center content-center text-center flex flex-col">
     <div id="option-container" class="flex flex-row justify-around content-center text-center">
-        <h2 class="text-2xl font-bold p-10">Work time</h2>
-        <h2 class="text-2xl font-bold p-10">Break time</h2>
+        {#if work_time == true}
+        <h2 id="work-time-text-active" class="text-2xl font-bold m-10 border-b-4 rounded">Work time</h2>
+        <h2 id="break-time-text-unactive" on:click={() => work_time = false} class="text-2xl font-bold m-10 border-0">Break time</h2>
+        {:else}
+        <h2 id="work-time-text-unactive" on:click={() => work_time = true} class="text-2xl font-bold m-10 border-0">Work time</h2>
+        <h2 id="break-time-text-active" class="text-2xl font-bold m-10 border-b-4">Break time</h2>
+        {/if}
+        
     </div>
         <div id="outer" class="bg-color justify-center place-content-center text-center">
             <svg id="timer-container" class="flex -rotate-90 justify-center content-center" xmlns="http://www.w3.org/2000/svg">
@@ -112,6 +123,15 @@
 </main>
 
 <style>
+    #option-container h2{
+        cursor: pointer;
+    }
+    #work-time-text-active{
+        border-color: #6266F1;
+    }
+    #break-time-text-active{
+        border-color: #6266F1;
+    }
     #timer-container{
         height: 450px;
         width: 450px;
