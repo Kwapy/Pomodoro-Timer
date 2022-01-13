@@ -4,26 +4,43 @@
     import Nav from "../components/Nav.svelte"
     import Timer from "../components/Timer.svelte";
     import Settings from "../components/Settings.svelte";
-    import { showSettings } from "../stores/store";
+    import { showSettings, time_value } from "../stores/store";
+
+    let minutes;
+    let seconds;
+    let time;
+    $: time = ($time_value);
 
     let showSettings_value;
     showSettings.subscribe(value => {
 		showSettings_value = value;
 	});
+
+    $: minutes= Math.floor((time/100)/60);
+    $: if(minutes<10){
+            minutes = "0" + minutes;
+        }
+        else{}
+    $: seconds= Math.floor((time/100) % 60);
+    $: if(seconds<10){
+            seconds = "0" + seconds;
+        }
+        else{}
        
 </script>
 
 
 <svelte:head>
-    <title>Pomodoro Timer</title>
+    <title>{minutes}:{seconds} | Pomodoro Timer</title>
 </svelte:head>
     <Nav/>
     <Timer></Timer>
-    <h1>{showSettings_value}</h1>
 {#if showSettings_value == true}
     <Settings></Settings>
 {/if}
 
 <style>
-    
+    *{
+        font-family: Gotham,sans-serif;
+    }
 </style>
