@@ -1,9 +1,15 @@
 <script>
-    import { workMinutes, breakMinutes} from "../stores/store";
+    import { workMinutes, breakMinutes, time_value, sessions, autoStart} from "../stores/store";
+    import { fade } from 'svelte/transition';
 
     let work_time = true;
 
     let startingMinutes_value;
+
+    let sessions_value;
+    let autoStart_value;
+    $: sessions_value = ($sessions);
+    $: autoStart_value = ($autoStart);
 
     $: if(work_time == true){
         startingMinutes_value = ($workMinutes);
@@ -19,6 +25,7 @@
     let seconds;
     $: aux = startingMinutes_value;
     $: time = startingMinutes_value * 60 * 100;
+    $: ($time_value) = time;
     $: minutes= Math.floor((time/100)/60);
     $: if(minutes<10){
             minutes = "0" + minutes;
@@ -59,7 +66,17 @@
             stop();
             startingMinutes_value=aux;
             time = startingMinutes_value * 60 * 100;
-            alert("The time has finished");
+            if(work_time == true){
+                alert("Work time has finished \nPomodoros left: ");
+                work_time = false;
+            }
+            else{
+                alert("Break time has finished");
+                work_time = true;
+            }
+            
+            
+            runTimer();
         }
         else{
         }
@@ -79,23 +96,28 @@
         time--;
     }
 
+
+    function underline(node, {duration = 300}){
+        
+    }
+
 </script>
 
 
 <main class="items-center justify-center content-center text-center flex flex-col">
     <div id="option-container" class="flex flex-row justify-around content-center text-center">
         {#if work_time == true}
-        <h2 id="work-time-text-active" class="text-2xl font-bold m-10 border-b-4 rounded">Work time</h2>
-        <h2 id="break-time-text-unactive" on:click={() => work_time = false} class="text-2xl font-bold m-10 border-0">Break time</h2>
+        <h2 id="active" class="text-2xl font-bold m-5 rounded transition transform ease-in">Work time</h2>
+        <h2 id="unactive" on:click={stop} on:click={() => work_time = false} class="text-2xl font-bold m-5 border-0 transition transform ease-in">Break time</h2>
         {:else}
-        <h2 id="work-time-text-unactive" on:click={() => work_time = true} class="text-2xl font-bold m-10 border-0">Work time</h2>
-        <h2 id="break-time-text-active" class="text-2xl font-bold m-10 border-b-4">Break time</h2>
+        <h2 id="unactive" on:click={stop} on:click={() => work_time = true} class="text-2xl font-bold m-5 border-0 transition transform ease-in" >Work time</h2>
+        <h2 id="active" class="text-2xl font-bold m-5 transition transform ease-in">Break time</h2>
         {/if}
         
     </div>
-        <div id="outer" class="bg-color justify-center place-content-center text-center">
+        <div id="outer" class="justify-center place-content-center text-center">
             <svg id="timer-container" class="flex -rotate-90 justify-center content-center" xmlns="http://www.w3.org/2000/svg">
-                <circle id="circle-timer"  class="shadow" stroke-width="20"
+                <circle id="circle-timer"  class="" stroke-width="20"
                 cx="50%" cy="50%" r="215" fill="transparent" stroke-dashoffset={1500-dashoffset} 
                 animation= "dash 5s linear alternate"/>
             </svg>
@@ -108,14 +130,14 @@
             </div> 
         </div>
         {#if timerRunning == false}
-        <div id="start-button" class="justify-around my-72">
-            <button on:click={runTimer} class="text-4xl py-4 px-10 text-white font-bold shadow-indigo-500/50">
+        <div id="start-button" class="justify-around my-12">
+            <button id="start-button" on:click={runTimer} class="text-4xl py-4 px-10 text-white font-bold shadow-md transition ease-in-out delay-150 bg-blue-600 hover:scale-101 hover:bg-blue-600 hover:shadow-xl duration-200">
                 Start
             </button>
         </div>
         {:else}
-        <div id="start-button" class="justify-around my-72">
-            <button  on:click={stop} class="text-4xl py-4 px-10 text-white font-bold shadow-indigo-500/50">
+        <div id="start-button" class="justify-around my-12">
+            <button  on:click={stop} class="text-4xl py-4 px-10 text-white font-bold shadow-md transition ease-in-out delay-150 bg-blue-600 hover:scale-101 hover:bg-blue-600 hover:shadow-xl duration-200">
                 Stop
             </button>
         </div>
@@ -123,14 +145,28 @@
 </main>
 
 <style>
+    *::after {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+    }
     #option-container h2{
         cursor: pointer;
     }
-    #work-time-text-active{
-        border-color: #6266F1;
+    #option-container h2::after{
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0%;
+        height: 3px;
+        background: rgb(37 99 235);
+        transition: 0.4s ease-out;
+
     }
-    #break-time-text-active{
-        border-color: #6266F1;
+    #option-container #active::after{
+        left: 0;
+        width: 100%;
     }
     #timer-container{
         height: 450px;
@@ -142,30 +178,24 @@
     #circle-timer{
         height: auto;
         width: auto;
-        stroke: #6266F1;
+        stroke: rgb(37 99 235);
         stroke-linecap: round;
         stroke-dasharray: 1500;
-        background: linear-gradient(45deg, #6266F1 0%, #7D53DE 100%);
     }
     #outer{
         width: 450px;
         height: 450px;
-        background-color: #F9F9F9;
+        background-color: #FFFFFF;
         border-radius: 50%;
         border: inset 10px solid;
-        box-shadow: 0px 0px 6px 0px #E2E2E2;
-        box-shadow: inset 0px 0px 6px 0px #E2E2E2;
+        box-shadow: 0px 0px 6px 0px #c2c2c2;
+        box-shadow: inset 0px 0px 6px 0px #c2c2c2;
         text-align: center;
         justify-content: center;
     }
     circle{
         width:150px;height:150px;
-        border: solid 1px #555;
-        background-color: #eed;
-        box-shadow: 10px -10px rgba(0,0,0,0.6);
-        -moz-box-shadow: 10px -10px rgba(0,0,0,0.6);
-        -webkit-box-shadow: 10px -10px rgba(0,0,0,0.6); 
-        -o-box-shadow: 10px -10px rgba(0,0,0,0.6);
+        background-color: #ffffff;
         border-radius:100px;
     }
     #timer-text{
@@ -180,9 +210,8 @@
         text-align: center;
         
     }
-    #start-button{
-        margin-top: 5vh;
-        background-image: linear-gradient(45deg, #6266F1 0%, #7D53DE 100%);
-        border-radius: 20px;
+
+    button{
+        border-radius: 14px;
     }
 </style>
