@@ -32,12 +32,7 @@
     }
 
     function toggleAutoStart(){
-        if(autoStart_value == true){
-            autoStart.set(false)
-        }
-        else{
-            autoStart.set(true)
-        }
+        console.log($autoStart)
     }
 </script>
 
@@ -67,13 +62,13 @@
         </div>
         <div class="autoStart-settings px-4">
             <h1 class="font-extrabold">Auto Start</h1>
-            <div class="minutes-settings-container py-1">
+            <div class="minutes-settings-container pt-1 pb-5 pr-10 grid grid-cols-2 content-start">
                 {#if autoStart_value == true }
-                <button on:click={ toggleAutoStart } class="w-20 bg-blue-600 text-white font-bold">Yes</button>
-                <button on:click={ toggleAutoStart } class="w-20 bg-gray-300 text-white font-bold">No</button>
+                <button on:click={ toggleAutoStart } on:click={ () => autoStart.set(true) }  class="w-20 rounded-l-xl bg-blue-600 hover:bg-blue-700 duration-200 text-white font-bold">Yes</button>
+                <button on:click={ toggleAutoStart } on:click={ () => autoStart.set(false) } class="w-20 rounded-r-xl bg-gray-300 hover:bg-gray-400 duration-200 text-white font-bold">No</button>
                 {:else}
-                <button on:click={ toggleAutoStart } class="w-20 bg-gray-300 text-white font-bold">Yes</button>
-                <button on:click={ toggleAutoStart } class="w-20 bg-blue-600 text-white font-bold">No</button>
+                <button on:click={ toggleAutoStart } on:click={ () => autoStart.set(true) } class="w-20 rounded-l-xl bg-gray-300 hover:bg-gray-400 duration-200 text-white font-bold">Yes</button>
+                <button on:click={ toggleAutoStart } on:click={ () => autoStart.set(false) } class="w-20 rounded-r-xl bg-blue-600 hover:bg-blue-700 duration-200 text-white font-bold">No</button>
                 {/if}
             </div>
         </div>
@@ -125,12 +120,11 @@
     }
     .autoStart-settings button{
         position: relative;
-        width: 25%;
-        height: 25%;
+        width: 100%;
+        height: 100%;
         align-items: center;
         justify-self: center;
         margin-top: 1vh;
-        border-radius: 10px;
     }
     #done-button{
         position: relative;
