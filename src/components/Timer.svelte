@@ -1,12 +1,14 @@
 <script>
     import { workMinutes, breakMinutes, time_value, sessions, autoStart} from "../stores/store";
     import { fade } from 'svelte/transition';
+import { session } from "$app/stores";
 
     let work_time = true;
 
     let startingMinutes_value;
 
     let sessions_value;
+    let current_session = 1;
     let autoStart_value;
     $: sessions_value = ($sessions);
     $: autoStart_value = ($autoStart);
@@ -67,16 +69,30 @@
             startingMinutes_value=aux;
             time = startingMinutes_value * 60 * 100;
             if(work_time == true){
-                alert("Work time has finished \nPomodoros left: ");
+                alert("Work time has finished \n");
                 work_time = false;
             }
             else{
-                alert("Break time has finished");
+                if(current_session === sessions_value){
+                    alert("Your work time has finished, good job!")
+
+                }
+                else{
+                    alert("Break time has finished \nSession " + current_session + " has finished\nStarting session "+(current_session+1));
+                    current_session++;
+                }
                 work_time = true;
+
+            }
+
+            if((autoStart_value == true)&&((current_session < sessions_value)||(work_time==false))){
+                runTimer();
+            }
+            else{
+
             }
             
             
-            runTimer();
         }
         else{
         }
