@@ -133,8 +133,11 @@ import { session } from "$app/stores";
     </div>
         <div id="outer" class="justify-center place-content-center text-center">
             <svg id="timer-container" class="flex -rotate-90 justify-center content-center" xmlns="http://www.w3.org/2000/svg">
-                <circle id="circle-timer"  class="" stroke-width="20"
+                <circle id="circle-timer-big"  class="" stroke-width="20"
                 cx="50%" cy="50%" r="215" fill="transparent" stroke-dashoffset={1500-dashoffset} 
+                animation= "dash 5s linear alternate"/>
+                <circle id="circle-timer-small"  class="" stroke-width="20"
+                cx="50%" cy="50%" r="165" fill="transparent" stroke-dashoffset={1500-((time/100)*1050)/(startingMinutes_value*60)} 
                 animation= "dash 5s linear alternate"/>
             </svg>
             <div id="timer-text" class="content-center text-center">
@@ -191,12 +194,15 @@ import { session } from "$app/stores";
         align-items: center;
         justify-content: center;
     }
-    #circle-timer{
+    #circle-timer-big{
         height: auto;
         width: auto;
         stroke: rgb(37 99 235);
         stroke-linecap: round;
         stroke-dasharray: 1500;
+    }
+    #circle-timer-small{
+        display: none;
     }
     #outer{
         width: 450px;
@@ -208,11 +214,6 @@ import { session } from "$app/stores";
         box-shadow: inset 0px 0px 6px 0px #c2c2c2;
         text-align: center;
         justify-content: center;
-    }
-    circle{
-        width:150px;height:150px;
-        background-color: #ffffff;
-        border-radius:100px;
     }
     #timer-text{
         display: flex;
@@ -229,5 +230,33 @@ import { session } from "$app/stores";
 
     button{
         border-radius: 14px;
+    }
+
+    @media only screen and (max-width: 500px){
+        #timer-container{
+            width: 350px;
+            height: 350px;
+            display: flex;
+        }
+        #circle-timer-big{
+            display: none;
+        }
+        #circle-timer-small{
+            display: block;
+            stroke: rgb(37 99 235);
+            stroke-linecap: round;
+            stroke-dasharray: 1500;
+            width: 350px;
+            height: 350px;
+        }
+        #outer{
+            width: 350px;
+            height: 350px;
+            margin-top: 10vh;
+        }
+        #time{
+            transform: translateY(-13.5rem);
+            font-size: 4rem;
+        }
     }
 </style>
