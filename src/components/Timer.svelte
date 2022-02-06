@@ -1,7 +1,7 @@
 <script>
-    import { workMinutes, breakMinutes, time_value, sessions, autoStart} from "../stores/store";
+    import { workMinutes, breakMinutes, time_value, sessions, autoStart, showReset } from "../stores/store";
     import { fade } from 'svelte/transition';
-import { session } from "$app/stores";
+    import { session } from "$app/stores";
 
     let work_time = true;
 
@@ -39,7 +39,8 @@ import { session } from "$app/stores";
         }
         else{}
     
-    let timerRunning=false;
+    let timerRunning= false;
+    let showReset_value = ($showReset);
     
     let dashoffset;
     $: if(time === (startingMinutes_value * 60 * 100)){
@@ -58,6 +59,16 @@ import { session } from "$app/stores";
         console.log("stop");
         timerRunning=false;
         clearInterval(timer);
+    }
+
+    function toggleReset(){
+        if(showReset_value == false){
+            showReset.set(true);
+        }
+        else{
+            
+        }
+        
     }
 
     function updateTimer(){
@@ -150,14 +161,17 @@ import { session } from "$app/stores";
         </div>
         {#if timerRunning == false}
         <div id="start-button" class="justify-around my-12">
-            <button id="start-button" on:click={runTimer} class="text-4xl py-4 px-10 text-white font-bold shadow-md transition ease-in-out delay-150 bg-blue-600 hover:scale-101 hover:bg-blue-600 hover:shadow-xl duration-200">
+            <button id="start-button" on:click={runTimer} class="text-4xl py-4 px-10 text-white font-bold shadow-md transition ease-in-out delay-150 bg-blue-600 hover:scale-105 hover:bg-blue-600 hover:shadow-xl duration-200">
                 Start
             </button>
         </div>
         {:else}
         <div id="start-button" class="justify-around my-12">
-            <button  on:click={stop} class="text-4xl py-4 px-10 text-white font-bold shadow-md transition ease-in-out delay-150 bg-blue-600 hover:scale-101 hover:bg-blue-600 hover:shadow-xl duration-200">
+            <button  on:click={stop} class="text-4xl py-4 px-10 text-white font-bold shadow-md transition ease-in-out delay-150 bg-blue-600 hover:scale-105 hover:bg-blue-600 hover:shadow-xl duration-200">
                 Stop
+            </button>
+            <button on:click={toggleReset} class="text-4xl py-4 px-10 text-white font-bold shadow-md transition ease-in-out delay-150 bg-blue-600 hover:scale-105 hover:bg-blue-600 hover:shadow-xl duration-200">
+                Reset
             </button>
         </div>
         {/if}
