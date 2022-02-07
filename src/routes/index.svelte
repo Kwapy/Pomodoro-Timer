@@ -2,7 +2,7 @@
     import { run } from "svelte/internal";
     import Start from "../components/Start.svelte";
     import Nav from "../components/Nav.svelte"
-    import Timer, {reset} from "../components/Timer.svelte";
+    import Timer from "../components/Timer.svelte";
     import Settings from "../components/Settings.svelte";
     import Reset from "../components/Reset.svelte";
     import { showSettings, time_value, showReset } from "../stores/store";

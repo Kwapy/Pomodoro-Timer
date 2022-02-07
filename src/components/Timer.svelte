@@ -17,6 +17,7 @@
         startingMinutes_value = ($workMinutes);
     }
         else{
+            
             startingMinutes_value = ($breakMinutes);
         }
     
@@ -41,6 +42,7 @@
     
     let timerRunning= false;
     let showReset_value = ($showReset);
+    $: showReset_value = ($showReset);
     
     let dashoffset;
     $: if(time === (startingMinutes_value * 60 * 100)){
@@ -66,9 +68,16 @@
             showReset.set(true);
         }
         else{
-            
+            showReset.set(false);
         }
         
+    }
+
+    function reset(){
+        console.log("reset");
+        timerRunning = false;
+        clearInterval(timer);
+        time = (startingMinutes_value * 60 * 100);
     }
 
     function updateTimer(){
@@ -123,10 +132,7 @@
         time--;
     }
 
-
-    function underline(node, {duration = 300}){
-        
-    }
+    
 
 </script>
 
@@ -160,19 +166,35 @@
             </div> 
         </div>
         {#if timerRunning == false}
-        <div id="start-button" class="justify-around my-12">
-            <button id="start-button" on:click={runTimer} class="text-4xl py-4 px-10 text-white font-bold shadow-md transition ease-in-out delay-150 bg-blue-600 hover:scale-105 hover:bg-blue-600 hover:shadow-xl duration-200">
+        <div class="justify-around my-12">
+            <button id="ctrl-button" on:click={runTimer} class="text-4xl py-4 px-10 text-white font-bold shadow-md transition ease-in-out delay-150 bg-blue-600 hover:scale-105 hover:bg-blue-600 hover:shadow-xl duration-200">
                 Start
             </button>
         </div>
         {:else}
-        <div id="start-button" class="justify-around my-12">
-            <button  on:click={stop} class="text-4xl py-4 px-10 text-white font-bold shadow-md transition ease-in-out delay-150 bg-blue-600 hover:scale-105 hover:bg-blue-600 hover:shadow-xl duration-200">
+        <div class="justify-around my-12">
+            <button  id="ctrl-button" on:click={stop} class="text-4xl py-4 px-10 text-white font-bold shadow-md transition ease-in-out delay-150 bg-blue-600 hover:scale-105 hover:bg-blue-600 hover:shadow-xl duration-200">
                 Stop
             </button>
-            <button on:click={toggleReset} class="text-4xl py-4 px-10 text-white font-bold shadow-md transition ease-in-out delay-150 bg-blue-600 hover:scale-105 hover:bg-blue-600 hover:shadow-xl duration-200">
+            <button id="ctrl-button" on:click={toggleReset} class="text-4xl py-4 px-10 text-white font-bold shadow-md transition ease-in-out delay-150 bg-blue-600 hover:scale-105 hover:bg-blue-600 hover:shadow-xl duration-200">
                 Reset
             </button>
+        </div>
+        {/if}
+
+        {#if showReset_value == true}
+        <div transition:fade={{duration: 200}} class="modal-bg">
+            <div class="modal grid grid-row-3 px-12 py-12">
+                <span on:click={() => showReset.set(false)} class="modal-close font-black">X</span>
+                <div class="autoStart-settings px-1">
+                    <h1 class="font-extrabold">Are you sure?</h1>
+                    <div class="minutes-settings-container pt-5 pb-5 flex">
+                        <button on:click={ reset } on:click={ () => showReset.set(false) }  class="w-20 rounded-l-md bg-blue-600 hover:bg-blue-700 duration-200 text-white font-bold">Yes</button>
+                        <button on:click={ () => showReset.set(false) } class="w-20 rounded-r-md bg-blue-600 hover:bg-blue-700 duration-200 text-white font-bold">No</button>
+                    </div>
+                </div>
+            </div>
+            <div on:click={reset} on:click={ () => showReset.set(false)} class="modal-bg-out"></div>
         </div>
         {/if}
 </main>
@@ -242,7 +264,7 @@
         
     }
 
-    button{
+    #ctrl-button{
         border-radius: 14px;
     }
 
@@ -272,5 +294,37 @@
             transform: translateY(-13.5rem);
             font-size: 4rem;
         }
+    }
+
+    .modal-bg{
+        position: fixed;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0,0,0,0.5);
+        top: 0;
+        left: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .modal-bg-out{
+        position: fixed;
+        width: 100vw;
+        height: 100vh;
+        top: 0;
+        left: 0;
+        cursor: pointer;
+    }
+    .modal{
+        position: relative;
+        background-color: white;
+        border-radius: 20px;
+        z-index: 1;
+    }
+    .modal-close{
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
     }
 </style>
