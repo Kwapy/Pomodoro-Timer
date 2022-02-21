@@ -19,24 +19,19 @@
     showSettings.subscribe(value => {
 		showSettings_value = value;
 	});
-    let showReset_value;
-    showReset.subscribe(value => {
-		showReset_value = value;
-	});
 
-    $: minutes= Math.floor((time/100)/60);
+    $: minutes= Math.floor((time)/60);
     $: if(minutes<10){
             minutes = "0" + minutes;
         }
         else{}
-    $: seconds= Math.floor((time/100) % 60);
+    $: seconds= Math.floor((time) % 60);
     $: if(seconds<10){
             seconds = "0" + seconds;
         }
         else{}
        
 </script>
-
 
 <svelte:head>
     <title>{minutes}:{seconds} | Pomodoro Timer</title>
