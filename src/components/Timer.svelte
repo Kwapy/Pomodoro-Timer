@@ -182,7 +182,7 @@
 				cy="50%"
 				r="165"
 				fill="transparent"
-				stroke-dashoffset={1500 - ((time / 100) * 1050) / (startingMinutes_value * 60)}
+				stroke-dashoffset={1500 - ((time) * 1050) / (startingMinutes_value * 60)}
 				animation="dash 5s linear alternate"
 			/>
 		</svg>
@@ -199,24 +199,24 @@
 			<button
 				id="ctrl-button"
 				on:click={runTimer}
-				class="text-4xl py-4 px-10 text-white font-bold shadow-md transition ease-in-out delay-150 bg-blue-600 hover:scale-105 hover:bg-blue-600 hover:shadow-xl duration-200"
+				class="text-4xl py-4 px-10 text-white font-bold shadow-md transition ease-in-out bg-blue-600 hover:scale-105 hover:bg-blue-600 hover:shadow-xl duration-200"
 			>
 				Start
 			</button>
 		</div>
 	{:else}
-		<div class="justify-around my-12">
+		<div class="my-12">
 			<button
-				id="ctrl-button"
+				id="stop-button"
 				on:click={stop}
-				class="text-4xl py-4 px-10 text-white font-bold shadow-md transition ease-in-out delay-150 bg-blue-600 hover:scale-105 hover:bg-blue-600 hover:shadow-xl duration-200"
+				class="text-4xl py-4 px-10 text-white font-bold shadow-md rounded-[14px] transition ease-in-out bg-blue-600 hover:scale-105 hover:bg-blue-600 hover:shadow-xl duration-200"
 			>
 				Stop
 			</button>
 			<button
-				id="ctrl-button"
+				id="reset-button"
 				on:click={toggleReset}
-				class="text-4xl py-4 px-10 text-white font-bold shadow-md transition ease-in-out delay-150 bg-blue-600 hover:scale-105 hover:bg-blue-600 hover:shadow-xl duration-200"
+				class="text-4xl py-4 px-10 text-white font-bold shadow-md rounded-[14px] transition ease-in-out bg-blue-600 hover:scale-105 hover:bg-blue-600 hover:shadow-xl duration-200"
 			>
 				Reset
 			</button>
