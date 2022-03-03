@@ -32,7 +32,6 @@
 	let seconds;
 	$: aux = startingMinutes_value;
 	$: time = startingMinutes_value * 60;
-	$: $time_value = time;
 	$: minutes = Math.floor(time / 60);
 	$: if (minutes < 10) {
 		minutes = '0' + minutes;
@@ -54,11 +53,13 @@
 	}
 
 	let timer;
+	let updateTime;
 
 	function runTimer() {
-        timer = setInterval(() => {
-					updateTimer();
-				}, 1000);
+		timerRunning = true;
+		timer = setInterval(() => {
+			updateTimer();
+		}, 1000);
 	}
 
 	function stop() {
@@ -83,9 +84,7 @@
 	}
 
 	function updateTimer() {
-		timerRunning = true;
-		console.log(minutes, seconds);
-
+		$time_value = time-1
 		if (time == 0) {
 			stop();
 			startingMinutes_value = aux;
@@ -125,7 +124,7 @@
 		} else {
 		}
 
-		dashoffset = ((time) * 1350) / (startingMinutes_value * 60);
+		dashoffset = (time * 1350) / (startingMinutes_value * 60);
 
 		time--;
 	}
@@ -182,7 +181,7 @@
 				cy="50%"
 				r="165"
 				fill="transparent"
-				stroke-dashoffset={1500 - ((time) * 1050) / (startingMinutes_value * 60)}
+				stroke-dashoffset={1500 - (time * 1050) / (startingMinutes_value * 60)}
 				animation="dash 5s linear alternate"
 			/>
 		</svg>
