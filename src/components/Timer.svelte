@@ -3,7 +3,6 @@
 		workMinutes,
 		breakMinutes,
 		time_value,
-		sessions,
 		autoStart,
 		showReset
 	} from '../stores/store';
@@ -14,10 +13,7 @@
 
 	let startingMinutes_value;
 
-	let sessions_value;
-	let current_session = 1;
 	let autoStart_value;
-	$: sessions_value = $sessions;
 	$: autoStart_value = $autoStart;
 
 	$: if (work_time == true) {
@@ -32,6 +28,7 @@
 	let seconds;
 	$: aux = startingMinutes_value;
 	$: time = startingMinutes_value * 60;
+	$: time_value.set(time)
 	$: minutes = Math.floor(time / 60);
 	$: if (minutes < 10) {
 		minutes = '0' + minutes;
@@ -53,7 +50,6 @@
 	}
 
 	let timer;
-	let updateTime;
 
 	function runTimer() {
 		timerRunning = true;
@@ -84,30 +80,18 @@
 	}
 
 	function updateTimer() {
-		$time_value = time-1
 		if (time == 0) {
 			stop();
-			startingMinutes_value = aux;
 			time = startingMinutes_value * 60;
 			if (work_time == true) {
 				alert('Work time has finished \n');
 				work_time = false;
 			} else {
-				if (current_session === sessions_value) {
-					alert('Your work time has finished, good job!');
-				} else {
-					alert(
-						'Break time has finished \nSession ' +
-							current_session +
-							' has finished\nStarting session ' +
-							(current_session + 1)
-					);
-					current_session++;
-				}
+				alert("Break time has finished")
 				work_time = true;
 			}
 
-			if (autoStart_value == true && (current_session < sessions_value || work_time == false)) {
+			if (autoStart_value == true ) {
 				runTimer();
 			} else {
 			}
@@ -226,18 +210,18 @@
 		<div transition:fade={{ duration: 200 }} class="modal-bg">
 			<div class="modal grid grid-row-3 px-12 py-12">
 				<span on:click={() => showReset.set(false)} class="modal-close font-black">X</span>
-				<div class="autoStart-settings px-1">
-					<h1 class="font-extrabold">Are you sure?</h1>
-					<div class="minutes-settings-container pt-5 pb-5 flex">
+				<div class="autoStart-settings px-1 flex-col content-center items-center">
+					<h1 class="font-extrabold">Do wou want to reset?</h1>
+					<div class="minutes-settings-container pt-5 pb-5 flex justify-center">
 						<button
 							on:click={reset}
 							on:click={() => showReset.set(false)}
-							class="w-20 rounded-l-md bg-blue-600 hover:bg-blue-700 duration-200 text-white font-bold"
+							class="w-20 py-2 rounded-l-xl bg-blue-600 hover:bg-blue-700 duration-200 text-white font-bold"
 							>Yes</button
 						>
 						<button
 							on:click={() => showReset.set(false)}
-							class="w-20 rounded-r-md bg-blue-600 hover:bg-blue-700 duration-200 text-white font-bold"
+							class="w-20 py-2 rounded-r-xl bg-blue-600 hover:bg-blue-700 duration-200 text-white font-bold"
 							>No</button
 						>
 					</div>

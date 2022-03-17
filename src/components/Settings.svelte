@@ -1,6 +1,6 @@
 <script>
     import { showSettings } from "../stores/store";
-    import { workMinutes, breakMinutes, sessions, autoStart } from "../stores/store";
+    import { workMinutes, breakMinutes, autoStart } from "../stores/store";
     import { fade } from "svelte/transition";
 
     let workMinutes_value;
@@ -9,7 +9,6 @@
     let autoStart_value;
     $: workMinutes_value = ($workMinutes);
     $: breakMinutes_value = ($breakMinutes);
-    $: sessions_value = ($sessions);
     $: autoStart_value = ($autoStart);
 
     function setWorkMinutes(){
@@ -20,10 +19,6 @@
     function setBreakMinutes(){
         breakMinutes.set(breakMinutes_value)
         console.log($breakMinutes)
-    }
-    function setSessionsValue(){
-        sessions.set(sessions_value)
-        console.log($sessions)
     }
 
     function toggleSettings(){
@@ -53,13 +48,6 @@
                 <input bind:value={ breakMinutes_value } class="w-40" type="range" max=90>
             </div>
         </div>
-        <div class="sessions-settings px-4">
-            <h1 class="font-extrabold">Sessions</h1>
-            <div class="minutes-settings-container py-1">
-                <input bind:value={ sessions_value } class="w-20" type="number" name="break-minutes" placeholder="Minutes" min=1 max=8>
-                <input bind:value={ sessions_value } class="w-40" type="range" min=1 max=8>
-            </div>
-        </div>
         <div class="autoStart-settings px-4">
             <h1 class="font-extrabold">Auto Start</h1>
             <div class="minutes-settings-container pt-1 pb-5 pr-10 grid grid-cols-2 content-start">
@@ -73,7 +61,7 @@
             </div>
         </div>
         <div id="done-button" class="justify-around transition ease-in-out delay-150 bg-blue-600 hover:scale-101 hover:bg-blue-700 hover:shadow-xl duration-200">
-            <button on:click={setWorkMinutes} on:click={setBreakMinutes} on:click={setSessionsValue} on:click={toggleSettings} class="text-2xl py-4 content-center text-white font-bold">
+            <button on:click={setWorkMinutes} on:click={setBreakMinutes} on:click={toggleSettings} class="text-2xl py-4 content-center text-white font-bold">
                 Done
             </button>
         </div>
