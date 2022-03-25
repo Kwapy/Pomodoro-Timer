@@ -30,15 +30,7 @@
 	$: time = startingMinutes_value * 60;
 	$: time_value.set(time)
 	$: minutes = Math.floor(time / 60);
-	$: if (minutes < 10) {
-		minutes = '0' + minutes;
-	} else {
-	}
 	$: seconds = Math.floor((time) % 60);
-	$: if (seconds < 10) {
-		seconds = '0' + seconds;
-	} else {
-	}
 
 	let timerRunning = false;
 	let showReset_value = $showReset;
@@ -80,33 +72,18 @@
 	}
 
 	function updateTimer() {
-		if (time == 0) {
+		if (time === 0) {
 			stop();
 			time = startingMinutes_value * 60;
 			if (work_time == true) {
-				alert('Work time has finished \n');
 				work_time = false;
 			} else {
-				alert("Break time has finished")
 				work_time = true;
 			}
-
 			if (autoStart_value == true ) {
 				runTimer();
-			} else {
-			}
-		} else {
-		}
-
-		if (seconds < 10) {
-			seconds = '0' + seconds;
-		} else {
-		}
-
-		if (minutes < 10) {
-			minutes = '0' + minutes;
-		} else {
-		}
+			} 
+		}  
 
 		dashoffset = (time * 1350) / (startingMinutes_value * 60);
 
@@ -171,9 +148,9 @@
 		</svg>
 		<div id="timer-text" class="content-center text-center">
 			<div id="time" class="grid grid-cols-9 text-7xl font-extrabold">
-				<p class="block col-span-4 justify-self-end">{minutes}</p>
+				<p class="block col-span-4 justify-self-end">{minutes.toString().padStart(2, "0")}</p>
 				<p id="dot" class="block">:</p>
-				<p class="block col-span-4 justify-self-start">{seconds}</p>
+				<p class="block col-span-4 justify-self-start">{seconds.toString().padStart(2, "0")}</p>
 			</div>
 		</div>
 	</div>

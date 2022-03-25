@@ -1,39 +1,34 @@
-# create-svelte
+# Timer for studying built with Svelte
+## About
+This project is a simple and minimalistic timer with the purpose of boosting productivity by measuring work and break times.
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte);
+[Check it out]
 
-## Creating a project
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Preview: 
+![previewImage](./preview1.png)
+![previewImage](./preview2.png)
+![previewImage](./preview3.png)
 
-```bash
-# create a new project in the current directory
-npm init svelte@next
 
-# create a new project in my-app
-npm init svelte@next my-app
+## Running the project
+### Local setup
+To run this project locally: 
+1. Clone the project locally, change into the directory, and install the dependencies:
+
+```sh
+git clone https://github.com/Kwapy/Study-timer-svelte
+
+cd Study-timer-svelte
+
+# install using NPM
+npm install
 ```
 
-> Note: the `@next` is temporary
+2. Start the app
 
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
+```
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
-
-Before creating a production version of your app, install an [adapter](https://kit.svelte.dev/docs#adapters) for your target environment. Then:
-
-```bash
-npm run build
-```
-
-> You can preview the built app with `npm run preview`, regardless of whether you installed an adapter. This should _not_ be used to serve your app in production.
-git token: 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
+[Check it out]: https://studytimer.vercel.app

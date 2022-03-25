@@ -21,20 +21,12 @@
 	});
 
     $: minutes= Math.floor((time)/60);
-    $: if(minutes<10){
-            minutes = "0" + minutes;
-        }
-        else{}
     $: seconds= Math.floor((time) % 60);
-    $: if(seconds<10){
-            seconds = "0" + seconds;
-        }
-        else{}
        
 </script>
 
 <svelte:head>
-    <title>{minutes}:{seconds} | Pomodoro Timer</title>
+    <title>{minutes.toString().padStart(2, "0")}:{seconds.toString().padStart(2, "0")} | Pomodoro Timer</title>
 </svelte:head>
     <Nav/>
     <Timer></Timer>
