@@ -1,52 +1,47 @@
 <script>
-	import {
-		workMinutes,
-		breakMinutes,
-		time_value,
-		autoStart,
-		showReset
-	} from '../stores/store';
+	import { workMinutes, breakMinutes, time_value, autoStart } from '../stores/store';
 	import { fade } from 'svelte/transition';
-	import { session } from '$app/stores';
+	import { onMount } from 'svelte';
 
 	let work_time = true;
-
-	let startingMinutes_value;
-
+	let startingMinutes;
 	let autoStart_value;
 	$: autoStart_value = $autoStart;
+	$: startingMinutes = $workMinutes;
 
 	$: if (work_time == true) {
-		startingMinutes_value = $workMinutes;
+		startingMinutes = $workMinutes;
 	} else {
-		startingMinutes_value = $breakMinutes;
+		startingMinutes = $breakMinutes;
 	}
 
-	let aux;
-	let time;
 	let minutes;
 	let seconds;
-	$: aux = startingMinutes_value;
-	$: time = startingMinutes_value * 60;
-	$: time_value.set(time)
+
+	$: time = startingMinutes * 60;
+	$: time_value.set(time);
 	$: minutes = Math.floor(time / 60);
-	$: seconds = Math.floor((time) % 60);
+	$: seconds = Math.floor(time % 60);
 
 	let timerRunning = false;
-	let showReset_value = $showReset;
-	$: showReset_value = $showReset;
-
-	let dashoffset;
-	$: if (time === startingMinutes_value * 60) {
-		dashoffset = 1500;
-	}
 
 	let timer;
 
 	function runTimer() {
 		timerRunning = true;
 		timer = setInterval(() => {
-			updateTimer();
+			ticking();
+			if (time == 0) {
+				stop();
+				if (work_time == true) {
+					work_time = false;
+				} else {
+					work_time = true;
+				}
+				if (autoStart_value == true) {
+					runTimer();
+				}
+			}
 		}, 1000);
 	}
 
@@ -54,40 +49,11 @@
 		console.log('stop');
 		timerRunning = false;
 		clearInterval(timer);
+		time = startingMinutes * 60;
 	}
 
-	function toggleReset() {
-		if (showReset_value == false) {
-			showReset.set(true);
-		} else {
-			showReset.set(false);
-		}
-	}
-
-	function reset() {
-		console.log('reset');
-		timerRunning = false;
-		clearInterval(timer);
-		time = startingMinutes_value * 60;
-	}
-
-	function updateTimer() {
-		if (time === 0) {
-			stop();
-			time = startingMinutes_value * 60;
-			if (work_time == true) {
-				work_time = false;
-			} else {
-				work_time = true;
-			}
-			if (autoStart_value == true ) {
-				runTimer();
-			} 
-		}  
-
-		dashoffset = (time * 1350) / (startingMinutes_value * 60);
-
-		time--;
+	function ticking() {
+		time -= 1;
 	}
 </script>
 
@@ -131,7 +97,7 @@
 				cy="50%"
 				r="215"
 				fill="transparent"
-				stroke-dashoffset={1500 - dashoffset}
+				stroke-dashoffset={1500 - (time * 1350) / (startingMinutes * 60)}
 				animation="dash 5s linear alternate"
 			/>
 			<circle
@@ -142,15 +108,15 @@
 				cy="50%"
 				r="165"
 				fill="transparent"
-				stroke-dashoffset={1500 - (time * 1050) / (startingMinutes_value * 60)}
+				stroke-dashoffset={1500 - (time * 1050) / (startingMinutes * 60)}
 				animation="dash 5s linear alternate"
 			/>
 		</svg>
 		<div id="timer-text" class="content-center text-center">
 			<div id="time" class="grid grid-cols-9 text-7xl font-extrabold">
-				<p class="block col-span-4 justify-self-end">{minutes.toString().padStart(2, "0")}</p>
+				<p class="block col-span-4 justify-self-end">{minutes.toString().padStart(2, '0')}</p>
 				<p id="dot" class="block">:</p>
-				<p class="block col-span-4 justify-self-start">{seconds.toString().padStart(2, "0")}</p>
+				<p class="block col-span-4 justify-self-start">{seconds.toString().padStart(2, '0')}</p>
 			</div>
 		</div>
 	</div>
@@ -173,38 +139,6 @@
 			>
 				Stop
 			</button>
-			<button
-				id="reset-button"
-				on:click={toggleReset}
-				class="text-4xl py-4 px-10 text-white font-bold shadow-md rounded-[14px] transition ease-in-out bg-blue-600 hover:scale-105 hover:bg-blue-600 hover:shadow-xl duration-200"
-			>
-				Reset
-			</button>
-		</div>
-	{/if}
-
-	{#if showReset_value == true}
-		<div transition:fade={{ duration: 200 }} class="modal-bg">
-			<div class="modal grid grid-row-3 px-12 py-12">
-				<span on:click={() => showReset.set(false)} class="modal-close font-black">X</span>
-				<div class="autoStart-settings px-1 flex-col content-center items-center">
-					<h1 class="font-extrabold">Do wou want to reset?</h1>
-					<div class="minutes-settings-container pt-5 pb-5 flex justify-center">
-						<button
-							on:click={reset}
-							on:click={() => showReset.set(false)}
-							class="w-20 py-2 rounded-l-xl bg-blue-600 hover:bg-blue-700 duration-200 text-white font-bold"
-							>Yes</button
-						>
-						<button
-							on:click={() => showReset.set(false)}
-							class="w-20 py-2 rounded-r-xl bg-blue-600 hover:bg-blue-700 duration-200 text-white font-bold"
-							>No</button
-						>
-					</div>
-				</div>
-			</div>
-			<div on:click={reset} on:click={() => showReset.set(false)} class="modal-bg-out" />
 		</div>
 	{/if}
 </main>
