@@ -11,11 +11,6 @@
     let time;
     $: time = ($time_value);
 
-    let showSettings_value;
-    showSettings.subscribe(value => {
-		showSettings_value = value;
-	});
-
     $: minutes= Math.floor((time)/60);
     $: seconds= Math.floor((time) % 60);
        
@@ -26,13 +21,6 @@
 </svelte:head>
     <Nav/>
     <Timer></Timer>
-{#if showSettings_value == true}
+{#if $showSettings == true}
     <Settings></Settings>
 {/if}
-
-
-<style>
-    *{
-        font-family: Gotham,sans-serif;
-    }
-</style>

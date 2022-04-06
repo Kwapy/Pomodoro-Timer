@@ -2,12 +2,10 @@
 	import { workMinutes, breakMinutes, time_value, autoStart } from '../stores/store';
 	import { fade } from 'svelte/transition';
 	import { onMount } from 'svelte';
+import { get } from 'svelte/store';
 
 	let work_time = true;
 	let startingMinutes;
-	let autoStart_value;
-	$: autoStart_value = $autoStart;
-	$: startingMinutes = $workMinutes;
 
 	$: if (work_time == true) {
 		startingMinutes = $workMinutes;
@@ -15,13 +13,14 @@
 		startingMinutes = $breakMinutes;
 	}
 
+	let time;
 	let minutes;
 	let seconds;
 
 	$: time = startingMinutes * 60;
 	$: time_value.set(time);
-	$: minutes = Math.floor(time / 60);
-	$: seconds = Math.floor(time % 60);
+	$: minutes = Math.floor((time) / 60);
+	$: seconds = Math.floor((time) % 60);
 
 	let timerRunning = false;
 
@@ -29,20 +28,17 @@
 
 	function runTimer() {
 		timerRunning = true;
+		let goal = new Date().getTime() + (startingMinutes * 60 * 1000)
 		timer = setInterval(() => {
-			ticking();
-			if (time == 0) {
+			ticking(goal);
+			if (time === 0) {
 				stop();
-				if (work_time == true) {
-					work_time = false;
-				} else {
-					work_time = true;
-				}
-				if (autoStart_value == true) {
+				work_time = !work_time
+				if ($autoStart == true) {
 					runTimer();
 				}
 			}
-		}, 1000);
+		}, 100);
 	}
 
 	function stop() {
@@ -52,8 +48,9 @@
 		time = startingMinutes * 60;
 	}
 
-	function ticking() {
-		time -= 1;
+	function ticking(goal) {
+		let now = new Date().getTime()
+		time = Math.floor((goal-now)/1000)
 	}
 </script>
 
@@ -236,37 +233,5 @@
 			transform: translateY(-13.5rem);
 			font-size: 4rem;
 		}
-	}
-
-	.modal-bg {
-		position: fixed;
-		width: 100vw;
-		height: 100vh;
-		background-color: rgba(0, 0, 0, 0.5);
-		top: 0;
-		left: 0;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	}
-	.modal-bg-out {
-		position: fixed;
-		width: 100vw;
-		height: 100vh;
-		top: 0;
-		left: 0;
-		cursor: pointer;
-	}
-	.modal {
-		position: relative;
-		background-color: white;
-		border-radius: 20px;
-		z-index: 1;
-	}
-	.modal-close {
-		position: absolute;
-		top: 10px;
-		right: 10px;
-		cursor: pointer;
 	}
 </style>
