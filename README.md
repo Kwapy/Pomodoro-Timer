@@ -1,4 +1,4 @@
-# Timer for studying built with Svelte
+# Timer for studying built with Svelte ⏱ 📚
 ## About
 This project is a simple and minimalistic timer with the purpose of boosting productivity by measuring work and break times.
 
