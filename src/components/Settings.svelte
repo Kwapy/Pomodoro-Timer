@@ -1,25 +1,31 @@
 <script>
     import { showSettings } from "../stores/store";
-    import { workMinutes, breakMinutes, autoStart, sessions } from "../stores/store";
+    import { pomodoro, shBreak, lgBreak, autoStart, sessions } from "../stores/store";
     import { fade } from "svelte/transition";
 
-    let workMinutes_value;
-    let breakMinutes_value;
+    let pomodoro_value;
+    let shBreak_value;
+    let lgBreak_value;
     let sessions_value;
     let autoStart_value;
-    $: workMinutes_value = ($workMinutes);
-    $: breakMinutes_value = ($breakMinutes);
+    $: pomodoro_value = ($pomodoro);
+    $: shBreak_value = ($shBreak);
+    $: lgBreak_value = ($lgBreak)
     $: autoStart_value = ($autoStart);
     $: sessions_value = ($sessions)
 
-    function setWorkMinutes(){
-        workMinutes.set(workMinutes_value)
-        console.log($workMinutes)
+    function setPomodoro(){
+        pomodoro.set(pomodoro_value)
+        console.log($pomodoro)
     }
 
-    function setBreakMinutes(){
-        breakMinutes.set(breakMinutes_value)
-        console.log($breakMinutes)
+    function setShBreak(){
+        shBreak.set(shBreak_value)
+        console.log($shBreak)
+    }
+    function setLgBreak(){
+        lgBreak.set(lgBreak_value)
+        console.log($lgBreak)
     }
 
     function toggleSettings(){
@@ -39,18 +45,25 @@
 <div transition:fade={{duration: 200}} class="modal-bg">
     <div class="modal grid grid-row-3 px-12 py-12">
         <span on:click={toggleSettings} class="modal-close font-extrabold">X</span>
-        <div class="work-time-setting px-4">
+        <div class="pomodoro-setting px-4">
             <h1 class="font-extrabold">Work Time</h1>
             <div class="minutes-settings-container py-1">
-                <input bind:value={ workMinutes_value } class="w-20" type="number" placeholder="Minutes" min=0 max=90>
-                <input bind:value={ workMinutes_value } class="w-40" type="range" max=90>
+                <input bind:value={ pomodoro_value } class="w-20" type="number" placeholder="Minutes" min=0 max=90>
+                <input bind:value={ pomodoro_value } class="w-40" type="range" max=90>
             </div>
         </div>
-        <div class="break-time-settings px-4">
-            <h1 class="font-extrabold">Break Time</h1>
+        <div class="shBreak-settings px-4">
+            <h1 class="font-extrabold">Short Break</h1>
             <div class="minutes-settings-container py-1">
-                <input bind:value={ breakMinutes_value } class="w-20" type="number" name="break-minutes" placeholder="Minutes" min=0 max=90>
-                <input bind:value={ breakMinutes_value } class="w-40" type="range" max=90>
+                <input bind:value={ shBreak_value } class="w-20" type="number" name="break-minutes" placeholder="Minutes" min=0 max=90>
+                <input bind:value={ shBreak_value } class="w-40" type="range" max=90>
+            </div>
+        </div>
+        <div class="lgBreak-settings px-4">
+            <h1 class="font-extrabold">Long Break</h1>
+            <div class="minutes-settings-container py-1">
+                <input bind:value={ lgBreak_value } class="w-20" type="number" name="break-minutes" placeholder="Minutes" min=0 max=90>
+                <input bind:value={ lgBreak_value } class="w-40" type="range" max=90>
             </div>
         </div>
         <div class="autoStart-settings px-4">
@@ -73,7 +86,7 @@
             </div>
         </div>
         <div id="done-button" class="justify-around transition ease-in-out delay-150 bg-blue-600 hover:scale-101 hover:bg-blue-700 hover:shadow-xl duration-200">
-            <button on:click={setWorkMinutes} on:click={setBreakMinutes} on:click={toggleSettings} class="text-2xl py-4 content-center text-white font-bold">
+            <button on:click={setPomodoro} on:click={setShBreak} on:click={setLgBreak} on:click={toggleSettings} class="text-2xl py-4 content-center text-white font-bold">
                 Done
             </button>
         </div>
