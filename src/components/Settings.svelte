@@ -1,6 +1,6 @@
 <script>
     import { showSettings } from "../stores/store";
-    import { workMinutes, breakMinutes, autoStart } from "../stores/store";
+    import { workMinutes, breakMinutes, autoStart, sessions } from "../stores/store";
     import { fade } from "svelte/transition";
 
     let workMinutes_value;
@@ -10,6 +10,7 @@
     $: workMinutes_value = ($workMinutes);
     $: breakMinutes_value = ($breakMinutes);
     $: autoStart_value = ($autoStart);
+    $: sessions_value = ($sessions)
 
     function setWorkMinutes(){
         workMinutes.set(workMinutes_value)
@@ -28,6 +29,10 @@
 
     function toggleAutoStart(){
         console.log($autoStart)
+    }
+    function setSessions(){
+        sessions.set(sessions_value)
+        console.log($sessions)
     }
 </script>
 
@@ -58,6 +63,13 @@
                 <button on:click={ toggleAutoStart } on:click={ () => autoStart.set(true) } class="w-20 rounded-l-xl bg-gray-300 hover:bg-gray-400 duration-200 text-white font-bold">Yes</button>
                 <button on:click={ toggleAutoStart } on:click={ () => autoStart.set(false) } class="w-20 rounded-r-xl bg-blue-600 hover:bg-blue-700 duration-200 text-white font-bold">No</button>
                 {/if}
+            </div>
+        </div>
+        <div class="sessions-settings px-4">
+            <h1 class="font-extrabold">Sessions</h1>
+            <div class="minutes-settings-container py-1">
+                <input bind:value={ sessions_value } class="w-20" type="number" name="sessions_value" placeholder="Sessins" min=1 max=8>
+                <input bind:value={ sessions_value } class="w-40" type="range" min=1 max=8>
             </div>
         </div>
         <div id="done-button" class="justify-around transition ease-in-out delay-150 bg-blue-600 hover:scale-101 hover:bg-blue-700 hover:shadow-xl duration-200">

@@ -1,26 +1,27 @@
 <script>
-	import { workMinutes, breakMinutes, time_value, autoStart } from '../stores/store';
+	import { workMinutes, breakMinutes, time_value, autoStart, sessions } from '../stores/store';
 	import { fade } from 'svelte/transition';
 	import { onMount } from 'svelte';
-import { get } from 'svelte/store';
+	import { get } from 'svelte/store';
 
 	let work_time = true;
 	let startingMinutes;
 
-	$: if (work_time == true) {
+	$: if (work_time) {
 		startingMinutes = $workMinutes;
 	} else {
 		startingMinutes = $breakMinutes;
 	}
 
 	let time;
+	let timeDasharray;
 	let minutes;
 	let seconds;
 
 	$: time = startingMinutes * 60;
 	$: time_value.set(time);
-	$: minutes = Math.floor((time) / 60);
-	$: seconds = Math.floor((time) % 60);
+	$: minutes = Math.floor(time / 60);
+	$: seconds = Math.floor(time % 60);
 
 	let timerRunning = false;
 
@@ -28,12 +29,19 @@ import { get } from 'svelte/store';
 
 	function runTimer() {
 		timerRunning = true;
-		let goal = new Date().getTime() + (startingMinutes * 60 * 1000)
+		let goal = new Date().getTime() + startingMinutes * 60 * 1000;
 		timer = setInterval(() => {
 			ticking(goal);
-			if (time === 0) {
+			if (time <= 0) {
+				work_time = !work_time;
+				if (work_time) {
+					startingMinutes = $workMinutes;
+				} else {
+					startingMinutes = $breakMinutes;
+				}
 				stop();
-				work_time = !work_time
+				console.log(work_time);
+				alert("Time has finished");
 				if ($autoStart == true) {
 					runTimer();
 				}
@@ -49,8 +57,9 @@ import { get } from 'svelte/store';
 	}
 
 	function ticking(goal) {
-		let now = new Date().getTime()
-		time = Math.floor((goal-now)/1000)
+		let now = new Date().getTime();
+		timeDasharray = (goal - now) / 1000;
+		time = Math.floor((goal - now) / 1000);
 	}
 </script>
 
@@ -58,7 +67,7 @@ import { get } from 'svelte/store';
 	<div id="option-container" class="flex flex-row justify-around content-center text-center">
 		{#if work_time == true}
 			<h2 id="active" class="text-2xl font-bold m-5 rounded transition transform ease-in">
-				Work time
+				Pomodoro
 			</h2>
 			<h2
 				id="unactive"
@@ -66,7 +75,15 @@ import { get } from 'svelte/store';
 				on:click={() => (work_time = false)}
 				class="text-2xl font-bold m-5 border-0 transition transform ease-in"
 			>
-				Break time
+				Short Break
+			</h2>
+			<h2
+				id="unactive"
+				on:click={stop}
+				on:click={() => (work_time = false)}
+				class="text-2xl font-bold m-5 border-0 transition transform ease-in"
+			>
+				Long Break
 			</h2>
 		{:else}
 			<h2
@@ -88,13 +105,13 @@ import { get } from 'svelte/store';
 		>
 			<circle
 				id="circle-timer-big"
-				class=""
+				class="transition-all ease-linear"
 				stroke-width="20"
 				cx="50%"
 				cy="50%"
 				r="215"
 				fill="transparent"
-				stroke-dashoffset={1500 - (time * 1350) / (startingMinutes * 60)}
+				stroke-dashoffset={1500 - (timeDasharray * 1350) / (startingMinutes * 60)}
 				animation="dash 5s linear alternate"
 			/>
 			<circle
@@ -105,7 +122,7 @@ import { get } from 'svelte/store';
 				cy="50%"
 				r="165"
 				fill="transparent"
-				stroke-dashoffset={1500 - (time * 1050) / (startingMinutes * 60)}
+				stroke-dashoffset={1500 - (timeDasharray * 1050) / (startingMinutes * 60)}
 				animation="dash 5s linear alternate"
 			/>
 		</svg>
