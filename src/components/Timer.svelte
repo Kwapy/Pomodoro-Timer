@@ -1,28 +1,39 @@
 <script>
-	import { pomodoro, shBreak, lgBreak, time_value, autoStart, sessions } from '../stores/store';
+	import {
+		pomodoro,
+		shBreak,
+		lgBreak,
+		breakInterval,
+		time_value,
+		autoStart,
+		sessions
+	} from '../stores/store';
 	import { fade } from 'svelte/transition';
 	import { onMount } from 'svelte';
 	import { get } from 'svelte/store';
 
 	let options;
-	$: options = [[1, $pomodoro], [2, $shBreak], [3, $lgBreak]];
+	$: options = [
+		[1, $pomodoro],
+		[2, $shBreak],
+		[3, $lgBreak]
+	];
 	let stage;
-	$: stage = options[0]
+	$: stage = options[0];
 	let startingMinutes;
 
-	$: startingMinutes = stage[1]
-	
-	let active = ["active", "unactive", "unactive"];
-	$: if(stage === options[0]){
-		active = ["active", "unactive", "unactive"];
-	}
-	else if(stage === options[1]){
-		active = ["unactive", "active", "unactive"];
-	}
-	else{
-		active = ["unactive", "unactive", "active"];
+	$: startingMinutes = stage[1];
+
+	let active = ['active', 'unactive', 'unactive'];
+	$: if (stage === options[0]) {
+		active = ['active', 'unactive', 'unactive'];
+	} else if (stage === options[1]) {
+		active = ['unactive', 'active', 'unactive'];
+	} else {
+		active = ['unactive', 'unactive', 'active'];
 	}
 
+	let currentInterval = 0;
 
 	let time;
 	let timeDasharray;
@@ -35,7 +46,7 @@
 	$: seconds = Math.floor(time % 60);
 
 	let timerRunning = false;
-	$: if(!timerRunning){
+	$: if (!timerRunning) {
 		timeDasharray = time;
 	}
 
@@ -47,16 +58,34 @@
 		timer = setInterval(() => {
 			ticking(goal);
 			if (time <= 0) {
-				if(stage[0]<=2){
-					stage = options[stage[0]];
+				switch (stage[0]) {
+					case 1:
+						stage = options[1];
+						break;
+					case 2:
+						if (currentInterval < $breakInterval) {
+							stage = options[0];
+						} else {
+							stage = options[2];
+						}
+						break;
+					case 3:
+						stage = options[0];
+						break;
+					default:
+						console.error('Something is wrong');
 				}
-				else{
-					stage = options[0];
+				if (stage[0] == 2) {
+					if (currentInterval < 4) {
+						currentInterval++;
+					} else {
+						currentInterval = 0;
+					}
 				}
 				console.log(stage);
-				startingMinutes = stage[1]
+				startingMinutes = stage[1];
 				stop();
-				alert("Time has finished");
+				alert('Time has finished');
 				if ($autoStart == true) {
 					runTimer();
 				}
@@ -81,29 +110,29 @@
 
 <main class="items-center justify-center content-center text-center flex flex-col">
 	<div id="option-container" class="flex flex-row justify-around content-center text-center">
-			<h2 
-			id={active[0]} 
+		<h2
+			id={active[0]}
 			class="text-2xl font-bold m-5 rounded transition transform ease-in"
 			on:click={() => (stage = options[0])}
-			>
-				Pomodoro
-			</h2>
-			<h2
-				id={active[1]}
-				on:click={stop}
-				on:click={() => (stage = options[1])}
-				class="text-2xl font-bold m-5 border-0 transition transform ease-in"
-			>
-				Short Break
-			</h2>
-			<h2
-				id={active[2]}
-				on:click={stop}
-				on:click={() => (stage = options[2])}
-				class="text-2xl font-bold m-5 border-0 transition transform ease-in"
-			>
-				Long Break
-			</h2>
+		>
+			Pomodoro
+		</h2>
+		<h2
+			id={active[1]}
+			on:click={stop}
+			on:click={() => (stage = options[1])}
+			class="text-2xl font-bold m-5 border-0 transition transform ease-in"
+		>
+			Short Break
+		</h2>
+		<h2
+			id={active[2]}
+			on:click={stop}
+			on:click={() => (stage = options[2])}
+			class="text-2xl font-bold m-5 border-0 transition transform ease-in"
+		>
+			Long Break
+		</h2>
 	</div>
 	<div id="outer" class="justify-center place-content-center text-center">
 		<svg
