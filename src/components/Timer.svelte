@@ -12,6 +12,17 @@
 
 	$: startingMinutes = stage[1]
 	
+	let active = ["active", "unactive", "unactive"];
+	$: if(stage === options[0]){
+		active = ["active", "unactive", "unactive"];
+	}
+	else if(stage === options[1]){
+		active = ["unactive", "active", "unactive"];
+	}
+	else{
+		active = ["unactive", "unactive", "active"];
+	}
+
 
 	let time;
 	let timeDasharray;
@@ -71,14 +82,14 @@
 <main class="items-center justify-center content-center text-center flex flex-col">
 	<div id="option-container" class="flex flex-row justify-around content-center text-center">
 			<h2 
-			id="unactive" 
+			id={active[0]} 
 			class="text-2xl font-bold m-5 rounded transition transform ease-in"
 			on:click={() => (stage = options[0])}
 			>
 				Pomodoro
 			</h2>
 			<h2
-				id="unactive"
+				id={active[1]}
 				on:click={stop}
 				on:click={() => (stage = options[1])}
 				class="text-2xl font-bold m-5 border-0 transition transform ease-in"
@@ -86,7 +97,7 @@
 				Short Break
 			</h2>
 			<h2
-				id="unactive"
+				id={active[2]}
 				on:click={stop}
 				on:click={() => (stage = options[2])}
 				class="text-2xl font-bold m-5 border-0 transition transform ease-in"
