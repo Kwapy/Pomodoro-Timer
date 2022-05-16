@@ -13,6 +13,12 @@
 
     $: minutes= Math.floor((time)/60);
     $: seconds= Math.floor((time) % 60);
+
+
+    //Configure cookies
+    $: if (typeof window !== 'undefined') {
+    localStorage.setItem("time", ($time_value))
+    }
        
 </script>
 

@@ -108,8 +108,8 @@
 	}
 </script>
 
-<main class="items-center justify-center content-center text-center flex flex-col">
-	<div id="option-container" class="flex flex-row justify-around content-center text-center">
+<main class="items-center text-[#1F1F1F] justify-center content-center text-center flex flex-col">
+	<div id="option-container" class="flex flex-row justify-around items-center content-center text-center">
 		<h2
 			id={active[0]}
 			class="text-2xl font-bold m-5 rounded transition transform ease-in"
@@ -147,7 +147,7 @@
 				cx="50%"
 				cy="50%"
 				r="215"
-				fill="transparent"
+				fill="#FDFEFF"
 				stroke-dashoffset={1500 - (timeDasharray * 1350) / (startingMinutes * 60)}
 				animation="dash 5s linear alternate"
 			/>
