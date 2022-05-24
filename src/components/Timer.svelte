@@ -6,11 +6,10 @@
 		breakInterval,
 		time_value,
 		autoStart,
-		sessions
+		sessions,
 	} from '../stores/store';
 	import { fade } from 'svelte/transition';
 	import { onMount } from 'svelte';
-	import { get } from 'svelte/store';
 
 	let options;
 	$: options = [
@@ -21,7 +20,6 @@
 	let stage;
 	$: stage = options[0];
 	let startingMinutes;
-
 	$: startingMinutes = stage[1];
 
 	let active = ['active', 'unactive', 'unactive'];
@@ -105,6 +103,7 @@
 		let now = new Date().getTime();
 		timeDasharray = (goal - now) / 1000;
 		time = Math.floor((goal - now) / 1000);
+		lastTime.set(time);
 	}
 </script>
 

@@ -3,6 +3,20 @@
     import Timer from "../components/Timer.svelte";
     import Settings from "../components/Settings.svelte";
     import { showSettings, time_value} from "../stores/store";
+    import { onMount} from "svelte"
+
+    //If there one of these varibles is null, assign to that variable a default value
+    onMount(() => {
+		if(localStorage.getItem("pomodoro") === null){
+			localStorage.setItem("pomodoro", 25)
+		}
+		if(localStorage.getItem("shBreak") === null){
+			localStorage.setItem("shBreak", 5)
+		}
+		if(localStorage.getItem("lgBreak") === null){
+			localStorage.setItem("lgBreak", 15)
+		}
+	})
 
 
 
@@ -15,10 +29,8 @@
     $: seconds= Math.floor((time) % 60);
 
 
-    //Configure cookies
-    $: if (typeof window !== 'undefined') {
-    localStorage.setItem("time", ($time_value))
-    }
+    
+    
        
 </script>
 
